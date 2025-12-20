@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Kenyan-inspired warm palette */
+    --background: 30 25% 97%;
+    --foreground: 25 30% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 25 30% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 25 30% 15%;
+
+    /* Warm terracotta - Kenyan sunset */
+    --primary: 16 75% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Deep teal - safari nature */
+    --secondary: 186 55% 42%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Soft neutral */
+    --muted: 30 20% 92%;
+    --muted-foreground: 25 15% 45%;
+
+    /* Gold accent - luxury touch */
+    --accent: 42 85% 55%;
+    --accent-foreground: 25 30% 15%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 30 20% 88%;
+    --input: 30 20% 88%;
+    --ring: 16 75% 58%;
+
+    --radius: 0.75rem;
+
+    /* Custom hotel colors */
+    --hero-gradient-start: 16 75% 58%;
+    --hero-gradient-end: 186 55% 42%;
+    
+    --warm-bg: 30 35% 96%;
+    --warm-text: 25 25% 25%;
+    
+    /* Shadows with warmth */
+    --shadow-warm: 16 75% 58%;
+    --shadow-subtle: 30 10% 80%;
+  }
+
+  .dark {
+    --background: 25 30% 8%;
+    --foreground: 30 25% 95%;
+
+    --card: 25 25% 12%;
+    --card-foreground: 30 25% 95%;
+
+    --popover: 25 25% 12%;
+    --popover-foreground: 30 25% 95%;
+
+    --primary: 16 75% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 186 55% 42%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 25 20% 18%;
+    --muted-foreground: 30 15% 60%;
+
+    --accent: 42 85% 55%;
+    --accent-foreground: 25 30% 10%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 30 25% 95%;
+
+    --border: 25 20% 22%;
+    --input: 25 20% 22%;
+    --ring: 16 75% 58%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "kern" 1;
+    text-rendering: optimizeLegibility;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .animate-fade-up {
+    animation: fade-up 0.6s ease-out;
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out;
+  }
+  
+  .animate-slide-in {
+    animation: slide-in 0.8s ease-out;
+  }
+  
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slide-in {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+  }
+  
+  .gradient-warm {
+    background: linear-gradient(180deg, hsl(var(--warm-bg)) 0%, hsl(var(--background)) 100%);
+  }
+  
+  .shadow-warm {
+    box-shadow: 0 10px 40px -10px hsl(var(--shadow-warm) / 0.2);
+  }
+  
+  .shadow-soft {
+    box-shadow: 0 4px 20px -4px hsl(var(--shadow-subtle) / 0.3);
+  }
+}
