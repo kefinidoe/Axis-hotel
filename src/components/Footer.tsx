@@ -7,7 +7,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
   
   const { isAdmin, user } = useAuth();
-  const isMasterAdmin = isAdmin && user?.email === 'kelvinmwangi1744@gmail.com';
+  const isMasterAdmin = isAdmin && user?.email === 'nakuruaxishotel@gmail.com';
 
   return (
     <footer className="bg-foreground text-background py-12">
@@ -87,7 +87,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-5 h-5 flex-shrink-0" />
-                <span>info@axishotel.co.ke</span>
+                <span>nakuruaxishotel@gmail.com</span>
               </li>
             </ul>
           </div>

@@ -44,7 +44,7 @@ export default function Admin() {
       return;
     }
 
-    const isMasterAdmin = isAdmin && user.email === 'kelvinmwangi1744@gmail.com';
+    const isMasterAdmin = isAdmin && user.email === 'nakuruaxishotel@gmail.com';
     
     if (!isMasterAdmin) {
       toast({

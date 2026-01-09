@@ -85,7 +85,7 @@ const Contact = () => {
                       <Mail className="w-5 h-5 text-primary mt-1" />
                       <div>
                         <p className="font-semibold text-sm">Email</p>
-                        <p className="text-muted-foreground text-sm">info@axishotel.co.ke</p>
+                        <p className="text-muted-foreground text-sm">nakuruaxishotel@gmail.com</p>
                       </div>
                     </div>
                   </div>
