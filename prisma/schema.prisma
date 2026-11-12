@@ -1,0 +1,202 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  role          String    @default("RECEPTIONIST")
+  password      String?
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String? @db.Text
+  access_token       String? @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String? @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Guest {
+  id                  String        @id @default(cuid())
+  fullName            String
+  phone               String?
+  email               String?
+  idNumber            String?
+  nationality         String?
+  vehicleRegistration String?
+  notes               String?       @db.Text
+  isArchived          Boolean       @default(false)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  reservations        Reservation[]
+  folios              Folio[]
+}
+
+model Reservation {
+  id            String              @id @default(cuid())
+  code          String              @unique
+  guestId       String
+  checkInDate   DateTime
+  checkOutDate  DateTime
+  status        String              @default("PENDING")
+  source        String?             @default("WALK_IN")
+  adults        Int                 @default(1)
+  children      Int                 @default(0)
+  discount      Decimal?            @db.Decimal(10, 2)
+  notes         String?             @db.Text
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  guest         Guest               @relation(fields: [guestId], references: [id])
+  rooms         ReservationToRoom[]
+  folios        Folio[]
+}
+
+model Room {
+  id           String              @id @default(cuid())
+  number       String              @unique
+  floor        Int
+  roomTypeId   String
+  status       String              @default("AVAILABLE")
+  roomType     RoomType            @relation(fields: [roomTypeId], references: [id])
+  reservations ReservationToRoom[]
+  maintenance  MaintenanceTicket[]
+}
+
+model RoomType {
+  id           String        @id @default(cuid())
+  name         String        @unique
+  description  String?
+  baseRate     Decimal       @db.Decimal(10, 2)
+  rooms        Room[]
+}
+
+model ReservationToRoom {
+  id            String      @id @default(cuid())
+  reservationId String
+  roomId        String
+  rate          Decimal     @db.Decimal(10, 2)
+  reservation   Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  room          Room        @relation(fields: [roomId], references: [id])
+}
+
+model Folio {
+  id            String      @id @default(cuid())
+  reservationId String?
+  guestId       String?
+  isClosed      Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  reservation   Reservation? @relation(fields: [reservationId], references: [id])
+  guest         Guest?       @relation(fields: [guestId], references: [id])
+  items         FolioItem[]
+  payments      Payment[]
+}
+
+model FolioItem {
+  id          String   @id @default(cuid())
+  folioId     String
+  type        String   // ROOM_CHARGE, RESTAURANT, LAUNDRY, OTHER_SERVICE, DISCOUNT, TAX
+  description String
+  quantity    Int      @default(1)
+  unitPrice   Decimal  @db.Decimal(10, 2)
+  total       Decimal  @db.Decimal(10, 2)
+  createdAt   DateTime @default(now())
+  folio       Folio    @relation(fields: [folioId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  folioId         String
+  amount          Decimal       @db.Decimal(10, 2)
+  paymentMethodId String
+  status          String        @default("COMPLETED")
+  transactionId   String?
+  createdAt       DateTime      @default(now())
+  folio           Folio         @relation(fields: [folioId], references: [id])
+  paymentMethod   PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+}
+
+model PaymentMethod {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  payments Payment[]
+}
+
+model Expense {
+  id          String   @id @default(cuid())
+  description String
+  category    String
+  amount      Decimal  @db.Decimal(10, 2)
+  status      String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  createdBy   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model InventoryItem {
+  id             String          @id @default(cuid())
+  sku            String?         @unique
+  name           String
+  category       String
+  unit           String
+  currentStock   Decimal         @db.Decimal(10, 3) @default(0)
+  reorderLevel   Decimal         @db.Decimal(10, 3) @default(0)
+  costPerUnit    Decimal         @db.Decimal(10, 2) @default(0)
+  isActive       Boolean         @default(true)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  stockMovements StockMovement[]
+}
+
+model StockMovement {
+  id              String        @id @default(cuid())
+  inventoryItemId String
+  type            String        // PURCHASE, MEAL_SALE, WASTAGE, ADJUSTMENT
+  quantity        Decimal       @db.Decimal(10, 3)
+  referenceId     String?       // ID of the related transaction (e.g., FolioItem ID for meal sales)
+  createdAt       DateTime      @default(now())
+  inventoryItem   InventoryItem @relation(fields: [inventoryItemId], references: [id])
+}
+
+model MaintenanceTicket {
+  id          String   @id @default(cuid())
+  roomId      String
+  issue       String
+  priority    String   @default("NORMAL") // LOW, NORMAL, HIGH, URGENT
+  status      String   @default("OPEN")   // OPEN, IN_PROGRESS, RESOLVED, CLOSED
+  reportedBy  String?
+  assignedTo  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  room        Room     @relation(fields: [roomId], references: [id])
+}

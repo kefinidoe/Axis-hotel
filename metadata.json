@@ -1,0 +1,6 @@
+{
+  "name": "Axis Hotel Management System",
+  "description": "Comprehensive hotel management system tailored for Axis Hotel with reservations, front desk, housekeeping, restaurant POS, inventory, billing, and reports.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

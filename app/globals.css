@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-bg text-text-primary antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+@layer components {
+  .premium-card {
+    @apply bg-white rounded-2xl border border-border shadow-sm hover:shadow-md transition-all duration-300;
+  }
+
+  .premium-table {
+    @apply w-full text-left border-collapse;
+  }
+
+  .premium-table thead tr {
+    @apply bg-navy-50/50 border-b border-border;
+  }
+
+  .premium-table th {
+    @apply py-4 px-6 text-[10px] font-black uppercase text-navy-400 tracking-widest;
+  }
+
+  .premium-table td {
+    @apply py-4 px-6 border-b border-border/50 text-sm align-middle;
+  }
+
+  .premium-table tbody tr:last-child td {
+    @apply border-b-0;
+  }
+
+  .premium-table tbody tr {
+    @apply hover:bg-navy-50/30 transition-colors duration-200;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply bg-navy-500 text-white hover:bg-navy-600 shadow-sm active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply bg-white text-navy-600 border border-navy-200 hover:bg-navy-50 active:scale-[0.98];
+  }
+
+  .btn-teal {
+    @apply bg-teal-500 text-white hover:bg-teal-600 shadow-sm active:scale-[0.98];
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-tighter border;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2.5 rounded-xl border border-border bg-white focus:border-navy-400 focus:ring-4 focus:ring-navy-400/10 transition-all outline-none text-sm placeholder:text-text-muted;
+  }
+
+  .table-container {
+    @apply premium-card overflow-hidden;
+  }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
